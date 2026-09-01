@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SLIDE MATCH - V7 (Modular Edition)</title>
+    
+    <!-- External Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght=800;900&family=Noto+Sans+JP:wght=700;900&display=swap" rel="stylesheet">
+    
+    <!-- Modular Stylesheets -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/screens.css">
+    <link rel="stylesheet" href="css/board.css">
+    <link rel="stylesheet" href="css/cards.css">
+    <link rel="stylesheet" href="css/modals.css">
+</head>
+<body>
+
+    <!-- Splash Screen -->
+    <div id="splashScreen" class="screen active">
+        <div class="shutter top"></div>
+        <div class="shutter bottom"></div>
+        <div class="scan-line"></div>
+        <div class="splash-text-container">
+            <div class="splash-text">Self-proclaimed minimalist</div>
+        </div>
+    </div>
+
+    <!-- Main Home Screen -->
+    <div id="homeScreen" class="screen">
+        <div class="home-header" id="homeHeader">
+            <button id="modSettingsOpenBtn" onclick="toggleModModal(true)">EX pack</button>
+        </div>
+
+        <div class="logo-container" id="logoContainer">
+            <h1 class="logo-main">SLIDE<br>MATCH</h1>
+            <span class="logo-sub"> - Version 7 - </span>
+        </div>
+        <div class="menu-buttons" id="menuButtons">
+          <button class="primary" onclick="startGame('CPU')">VS CPU</button>
+          <button class="primary" onclick="startGame('PVP')">2 PLAYERS</button>
+          <a href="about.html" style="text-decoration: none;"><button>HOW TO PLAY / ABOUT</button></a>
+          <button onclick="toggleModal(true)">SETTINGS</button>
+        </div>
+    </div>
+
+    <!-- Active Gameplay Screen -->
+    <div id="gameScreen" class="screen">
+        <div class="game-layout">
+            <div class="game-header">
+                <button onclick="backToHome()">LEAVE</button>
+                <div class="score-board">
+                    <span class="p1-score">P1: <span id="s1">50</span> MOVES / <span id="b1">32</span> BLKS</span>
+                    <span class="p2-score"><span id="p2Label">P2</span>: <span id="s2">50</span> MOVES / <span id="b2">32</span> BLKS</span>
+                </div>
+                <button onclick="toggleModal(true)">MENU</button>
+            </div>
+            
+            <div class="main-play-area" id="mainPlayArea">
+                <div class="board-wrapper">
+                    <div class="board" id="board"></div>
+                    <div id="status"></div>
+                </div>
+
+                <div class="side-hands-container" id="sideHandsContainer">
+                    <div class="player-field p2-field" id="p2Field">
+                        <div class="field-label" id="p2FieldLabel">P2 HAND (MAX 2)</div>
+                        <div class="cards-container" id="p2CardsContainer"></div>
+                    </div>
+
+                    <div class="player-field p1-field" id="p1Field">
+                        <div class="field-label">P1 HAND (MAX 2)</div>
+                        <div class="cards-container" id="p1CardsContainer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-title">SETTINGS</h2>
+            <div class="settings-group">
+                <div class="setting-item">
+                    <label class="setting-label">THEME</label>
+                    <select id="colorSelect" onchange="changeColorTheme(this.value)">
+                        <option value="modern">Soft Classic</option>
+                        <option value="forest">Soft Forest</option>
+                        <option value="sakura">Sakura</option>
+                        <option value="latte">Cafe Latte</option>
+                        <option value="dark">Choco Dark</option>
+                        <option value="midnight">Midnight</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label class="setting-label">SE TYPE</label>
+                    <select id="seSelect" onchange="changeSeType(this.value)">
+                        <option value="modern">Modern</option>
+                        <option value="retro">Retro</option>
+                        <option value="scifi">Sci-Fi</option>
+                        <option value="mechanical">Mechanical</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label class="setting-label">VOLUME</label>
+                    <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="50" oninput="changeVolume(this.value)">
+                </div>
+            </div>
+            <button class="primary modal-close-btn" onclick="toggleModal(false)">BACK</button>
+        </div>
+    </div>
+
+    <!-- Expansion Pack Modal -->
+    <div id="modSettingsModal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Expansion Pack SELECTION</h2>
+            <p class="modal-desc">ゲームに追加したいエキスパンションパックを選択してください。</p>
+            
+            <div class="mod-list">
+                <div class="mod-item">
+                    <label class="mod-label">NEW CARD PACK (n)</label>
+                    <button id="mod_newcard_btn" class="mod-toggle-item" onclick="toggleModPack('newcard')">NEW CARD: OFF</button>
+                </div>
+                <div class="mod-item">
+                    <label class="mod-label">MINIMUM PACK (m)</label>
+                    <button id="mod_min_btn" class="mod-toggle-item" onclick="toggleModPack('min')">MIN PACK: OFF</button>
+                </div>
+                <div class="mod-item">
+                    <label class="mod-label">RiNgO PACK (r)</label>
+                    <button id="mod_ringo_btn" class="mod-toggle-item" onclick="toggleModPack('ringo')">RiNgO PACK: OFF</button>
+                </div>
+                <div class="mod-item">
+                    <label class="mod-label mod-label-tantal">TANTAL NEW Geams (t)</label>
+                    <button id="mod_tantal_btn" class="mod-toggle-item" onclick="toggleModPack('tantal')">TANTAL NEW Geams: OFF</button>
+                </div>
+            </div>
+            
+            <button class="primary modal-close-btn" onclick="toggleModModal(false)">SAVE & CLOSE</button>
+        </div>
+    </div>
+
+    <!-- Game Over Result Modal -->
+    <div id="gameResultModal" class="modal">
+        <div class="modal-content text-center">
+            <h2 class="modal-title">GAME OVER</h2>
+            <div id="winMessage" class="win-message"></div>
+            <button class="primary" onclick="closeResultAndGoHome()">RETURN TO MENU</button>
+        </div>
+    </div>
+
+    <!-- Modular Scripts -->
+    <script src="js/cardData.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/themes.js"></script>
+    <script src="js/board.js"></script>
+    <script src="js/cardEffects.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

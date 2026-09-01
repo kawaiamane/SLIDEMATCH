@@ -1,0 +1,17 @@
+/* Design Tokens & Theme Variables */
+:root {
+    --bg-color: #fcfbf7;       
+    --text-color: #1a1a1a;     
+    --board-color: #1a1a1a;    
+    --empty-color: #f3f0e8;    
+    --target-hover: #e8e3d5;
+    --btn-bg: #fcfbf7;
+    --btn-text: #1a1a1a;
+    
+    --p1-color: #4a7bb0;       
+    --p2-color: #ce6a6a;       
+    
+    --corporate-font: "Montserrat", "Noto Sans JP", sans-serif;
+    --raw-shadow: 4px 4px 0px #1a1a1a; 
+    --card-shadow: 3px 3px 0px #1a1a1a;
+}

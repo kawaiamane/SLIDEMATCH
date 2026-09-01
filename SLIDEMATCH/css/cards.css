@@ -1,0 +1,62 @@
+/* Cards and Hands Styling */
+.side-hands-container {
+    width: 240px; display: flex; flex-direction: column; gap: 12px; justify-content: space-between;
+}
+.side-hands-container.hide-completely { display: none !important; }
+
+.player-field {
+    width: 100%; border: 2px dashed rgba(26, 26, 26, 0.2); border-radius: 6px; padding: 10px;
+    display: none; flex-direction: column; background-color: rgba(26, 26, 26, 0.01);
+}
+.player-field.mod-enabled-field { display: flex; }
+.player-field.active-field { border-color: var(--text-color); background-color: rgba(26, 26, 26, 0.03); }
+
+.field-label { font-size: 0.7rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; opacity: 0.6; margin-bottom: 8px; border-bottom: 1px solid rgba(26,26,26,0.1); padding-bottom: 4px;}
+.player-field.active-field .field-label { opacity: 1; }
+.p1-field .field-label { color: var(--p1-color); }
+.p2-field .field-label { color: var(--p2-color); }
+
+.p2-field { order: 1; }
+.p1-field { order: 3; }
+
+.cards-container { display: flex; flex-direction: column; gap: 8px; max-height: 380px; overflow-y: auto; padding-right: 4px; }
+
+.card {
+    width: 100%; border: 2px solid var(--text-color); border-radius: 6px; background-color: var(--btn-bg);
+    box-shadow: var(--card-shadow); cursor: pointer; position: relative; display: flex; flex-direction: column;
+    justify-content: flex-start; align-items: flex-start; transition: transform 0.1s, box-shadow 0.1s; padding: 8px; min-height: 68px;
+}
+.card-header-row { display: flex; width: 100%; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.card-inner-text { font-size: 0.8rem; font-weight: 900; text-align: left; line-height: 1.1; word-break: break-all; }
+.card-tag { font-size: 0.5rem; font-weight: 900; opacity: 0.5; text-transform: uppercase; border: 1px solid var(--text-color); padding: 1px 4px; border-radius: 2px; }
+.card-desc { font-size: 0.6rem; font-weight: 700; line-height: 1.2; opacity: 0.8; text-align: left; pointer-events: none; margin-top: 2px; width: 100%; border-top: 1px dashed rgba(26,26,26,0.15); padding-top: 4px; }
+
+.p2-field .card {
+    transform: rotate(180deg);
+    box-shadow: -3px -3px 0px var(--text-color);
+}
+.p2-field .card.active-use {
+    transform: rotate(180deg) translateX(4px);
+    box-shadow: -4px -4px 0px rgba(26,26,26,0.15);
+}
+
+.card.facedown { background-color: var(--text-color); border-color: var(--text-color); cursor: default; justify-content: center; align-items: center; }
+.card.facedown .card-header-row, .card.facedown .card-desc { display: none; }
+.card.facedown .card-inner-text { color: var(--bg-color); font-size: 1.2rem; text-align: center; width: 100%; }
+
+.card.active-use { background-color: var(--text-color); color: var(--bg-color); transform: translateX(-4px); box-shadow: 4px 4px 0px rgba(26,26,26,0.15); }
+.card.active-use .card-tag { border-color: var(--bg-color); color: var(--bg-color); }
+.card.active-use .card-desc { border-top-color: rgba(252,251,247,0.3); }
+.card.disabled { opacity: 0.3; cursor: not-allowed; }
+
+@media (max-width: 768px) {
+    .main-play-area { flex-direction: column; align-items: center; gap: 10px; overflow-y: auto; height: calc(100vh - 100px); }
+    .main-play-area.no-mods { gap: 0px; }
+    .side-hands-container { width: 100%; max-width: 460px; flex-direction: column; gap: 8px; }
+    .player-field { flex: none; width: 100%; }
+    .cards-container { flex-direction: row; overflow-x: auto; overflow-y: hidden; max-height: none; padding-right: 0; }
+    .card { width: 140px; flex-shrink: 0; min-height: 85px; }
+    .p2-field .card { transform: rotate(180deg); }
+    .p2-field .card.active-use { transform: rotate(180deg) translateY(4px); }
+    .card.active-use { transform: translateY(-4px); }
+}

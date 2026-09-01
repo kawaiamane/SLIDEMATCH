@@ -1,0 +1,173 @@
+/* ==========================================================================
+   About/Rules ページレイアウト & タブ切り替えスタイル
+   ========================================================================== */
+
+
+body {
+    overflow: auto !important; /* グローバルCSSの overflow: hidden を上書き */
+    touch-action: auto !important; /* スマホでのスクロール操作を許可 */
+}
+
+.about-container {
+    width: 100%;
+    max-width: 520px;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* 上詰めに変更してスクロールエリアを確保 */
+    margin: 0 auto;
+}
+
+.about-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* ラジオボタン（非表示） */
+.tab-switch {
+    display: none;
+}
+
+/* タブナビゲーション */
+.tab-menu {
+    display: flex;
+    gap: 0.8rem;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 0.8rem;
+    text-align: center;
+    font-weight: 900;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    border: 2px solid var(--text-color);
+    border-radius: 4px;
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+    box-shadow: var(--raw-shadow);
+    cursor: pointer;
+    transition: transform 0.05s, box-shadow 0.05s, background-color 0.15s, color 0.15s;
+}
+
+.tab-btn:active {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0px var(--text-color);
+}
+
+/* アクティブタブの状態表現 */
+#tab-rules:checked ~ .tab-menu label[for="tab-rules"],
+#tab-creator:checked ~ .tab-menu label[for="tab-creator"] {
+    background-color: var(--text-color);
+    color: var(--bg-color);
+}
+
+/* パネル表示制御 */
+.tab-panel {
+    display: none;
+}
+
+#tab-rules:checked ~ .about-content #panel-rules,
+#tab-creator:checked ~ .about-content #panel-creator {
+    display: block;
+}
+
+/* 情報カード（ネオブロータリズム UI） */
+.info-card {
+    background-color: var(--bg-color);
+    border: 2px solid var(--text-color);
+    border-radius: 6px;
+    padding: 1.5rem;
+    box-shadow: var(--raw-shadow);
+}
+
+.section-title {
+    font-size: 1.2rem;
+    font-weight: 900;
+    margin: 0 0 1rem 0;
+    border-bottom: 2px solid var(--text-color);
+    padding-bottom: 0.4rem;
+    letter-spacing: 1px;
+}
+
+.sub-title {
+    font-size: 0.85rem;
+    font-weight: 900;
+    margin: 1.2rem 0 0.5rem 0;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+}
+
+.sub-title::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 12px;
+    background-color: var(--text-color);
+    margin-right: 8px;
+}
+
+.section-lead {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+}
+
+.section-text {
+    font-size: 0.78rem;
+    line-height: 1.5;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    opacity: 0.85;
+}
+
+.rule-list {
+    margin: 0;
+    padding-left: 1.2rem;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    font-weight: 700;
+}
+
+.rule-list li {
+    margin-bottom: 0.5rem;
+}
+
+.creator-profile {
+    font-size: 0.78rem;
+    line-height: 1.6;
+    font-weight: 700;
+}
+
+.creator-name {
+    font-size: 0.95rem;
+    font-weight: 900;
+    margin: 0 0 0.1rem 0;
+}
+
+.creator-tagline {
+    font-size: 0.7rem;
+    font-weight: 800;
+    opacity: 0.6;
+    margin: 0 0 1rem 0;
+    text-transform: uppercase;
+}
+
+.creator-desc {
+    margin: 0 0 0.8rem 0;
+    opacity: 0.85;
+}
+
+.button-link {
+    text-decoration: none;
+    width: 100%;
+}

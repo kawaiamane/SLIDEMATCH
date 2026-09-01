@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SLIDE MATCH - About & Rules</title>
+
+    <!-- Google Fonts & 既存スタイルシート -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght=800;900&family=Noto+Sans+JP:wght=700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/screens.css">
+    <link rel="stylesheet" href="css/about.css">
+</head>
+<body>
+    <div class="about-container">
+        <!-- ロゴエリア -->
+        <header class="logo-container show-instantly">
+            <h1 class="logo-main">SLIDE<br>MATCH</h1>
+            <span class="logo-sub"> - ABOUT & RULES - </span>
+        </header>
+
+        <!-- メニュー切替スイッチ（CSS制御用ラジオボタン） -->
+        <input type="radio" id="tab-rules" name="about-tab" class="tab-switch" checked>
+        <input type="radio" id="tab-creator" name="about-tab" class="tab-switch">
+
+        <!-- メニューボタン（アクセシビリティに配慮したnav構成） -->
+        <nav class="tab-menu" aria-label="コンテンツ切り替え">
+            <label for="tab-rules" class="tab-btn">RULES</label>
+            <label for="tab-creator" class="tab-btn">CREATOR</label>
+        </nav>
+
+        <!-- メインコンテンツ -->
+        <main class="about-content">
+            <!-- 1. ルール紹介パネル（詳細版） -->
+            <section id="panel-rules" class="info-card tab-panel" aria-labelledby="heading-rules">
+                <h2 id="heading-rules" class="section-title">HOW TO PLAY</h2>
+                <p class="section-lead">
+                    『SLIDE MATCH』は、12×12の盤面上で自コマを巧みにスライドさせ、ラインを揃えて消去しながら相手の行動力を削り落とす、思考型の本格対戦パズルゲームです。
+                </p>
+
+                <h3 class="sub-title">基本システム & 勝利条件</h3>
+                <ul class="rule-list">
+                    <li><strong>勝利条件:</strong> 盤面の自分のコマ数を「0」にするか、持ち行動回数（MOVES）をゼロまで削り切れば勝利となります。</li>
+                    <li><strong>コマの移動:</strong> 自コマを選択し、上下左右に隣接する「空きマス」へとドラッグして1マス移動させます。1移動につきMOVESが1消費されます。</li>
+                    <li><strong>マッチングと消去:</strong> 同色のコマを「縦・横・斜め」のいずれかに5マス以上連続で揃えると、そのコマが消去され盤面から取り除かれます。</li>
+                </ul>
+
+                <h3 class="sub-title">EX Pack（拡張カードシステム）</h3>
+                <p class="section-text">
+                    ゲーム開始時にEX Packを有効化すると、戦略性を大きく広げる特殊カードが手札に付与されます。
+                </p>
+                <ul class="rule-list">
+                    <li><strong>手札上限:</strong> 各プレイヤーは最大2枚まで手札を保持できます。ターン開始時や行動後に確率で山札からドローします。</li>
+                    <li><strong>多様な効果:</strong> 相手コマの直接破壊、盤面のシャッフル、連続行動（DBL TURN）など、一発逆転を狙える様々なカードが存在します。</li>
+                    <li><strong>おすすめの組み合わせ:</strong> RiNgOパック&NEW CARD</li>
+                </ul>
+            </section>
+
+            <!-- 2. 製作者紹介パネル（詳細版） -->
+            <section id="panel-creator" class="info-card tab-panel" aria-labelledby="heading-creator">
+                <h2 id="heading-creator" class="section-title">CREATOR</h2>
+                <div class="creator-profile">
+                    <p class="creator-name">Self-proclaimed minimalist</p>
+                    <p class="creator-tagline">Web / Game Developer & Designer</p>
+                    <p class="creator-desc">
+                        「無駄を削ぎ落とした美しさと、奥深いゲーム性の融合」をテーマに、Web技術（HTML/CSS/JavaScript）をベースとしたインディーゲームやインタラクティブなWebアプリケーションの企画・開発を行っています。
+                    </p>
+                    
+                    <h3 class="sub-title">開発のこだわり</h3>
+                    <p class="creator-desc">
+                        デザイン面では、太い輪郭線と強烈なシャドウが特徴的な「ネオブロータリズム（Neo-Brutalism）」のトーンを採用。直感的な操作性と視覚的なインパクトを両立させています。また、外部ライブラリに頼らない軽量で高速なコード設計を重視しています。
+                    </p>
+
+                    <h3 class="sub-title">メッセージ</h3>
+                    <p class="creator-desc">
+                        シンプルながら何度でも遊べるパズル体験を目指して制作しました。各種EX Packの組み合わせによる奥深い戦術をぜひお楽しみください！
+                    </p>
+                </div>
+            </section>
+
+            <!-- ホームに戻るボタン -->
+            <a href="index.html" class="button-link">
+                <button class="primary">BACK TO HOME</button>
+            </a>
+        </main>
+    </div>
+</body>
+</html>

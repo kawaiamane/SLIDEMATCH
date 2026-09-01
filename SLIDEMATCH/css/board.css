@@ -1,0 +1,41 @@
+/* Game Board Layout, Drag & Cell Styling */
+.game-layout {
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem; width: 95vw; max-width: 960px;
+}
+.game-header { display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 0.1rem; }
+.game-header button { padding: 0.4rem 0.7rem; font-size: 0.7rem; box-shadow: 2px 2px 0px var(--text-color); width: auto; }
+
+.score-board { display: flex; gap: 1rem; font-weight: 900; font-size: 0.75rem; letter-spacing: 1px; }
+.p1-score { color: var(--p1-color); }
+.p2-score { color: var(--p2-color); }
+
+.main-play-area {
+    display: flex; flex-direction: row; gap: 20px; width: 100%; justify-content: center; align-items: stretch;
+}
+.main-play-area.no-mods { gap: 0px; }
+
+.board-wrapper {
+    flex: 1; max-width: 460px; display: flex; flex-direction: column; gap: 10px;
+    order: 2;
+}
+
+.board {
+    display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; background-color: var(--board-color); padding: 2px; 
+    border: 2px solid var(--text-color); border-radius: 6px; width: 100%; aspect-ratio: 1 / 1; position: relative;
+    box-shadow: var(--raw-shadow); background-clip: padding-box;
+}
+
+.cell { background-color: var(--empty-color); position: relative; transition: background-color 0.2s, transform 0.2s ease-out; }
+.cell.p1 { background-color: var(--p1-color); }
+.cell.p2 { background-color: var(--p2-color); }
+
+.cell.matched-vanish { transform: scale(0); background-color: var(--bg-color) !important; transition: transform 0.25s cubic-bezier(0.4, 0, 1, 1), background-color 0.25s; }
+.cell.dragging { opacity: 1; transform: scale(1.05); cursor: grabbing; z-index: 100; position: absolute; border: 2px solid var(--text-color); box-shadow: var(--raw-shadow); pointer-events: none; }
+.cell.valid-target { background-color: #f7f6f2; }
+.cell.valid-target::after { content: ''; position: absolute; top: 35%; left: 35%; width: 30%; height: 30%; background-color: var(--text-color); opacity: 0.15; border-radius: 50%; }
+.cell.valid-target.hover { background-color: var(--target-hover); }
+
+.cell.card-selectable { cursor: pointer; animation: pulse-select 1s infinite ease-in-out; border: 2px dashed #ce6a6a; z-index: 10; }
+@keyframes pulse-select { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+#status { font-weight: 900; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; border: 2px solid var(--text-color); padding: 0.3rem 0.8rem; background-color: var(--btn-bg); box-shadow: 2px 2px 0px var(--text-color); margin-top: 0.1rem; width: 100%; text-align: center; }

@@ -1,0 +1,69 @@
+/* Reusable Component UI Elements */
+button, select {
+    font-family: var(--corporate-font);
+    padding: 0.9rem 1.2rem;
+    border: 2px solid var(--text-color);
+    border-radius: 4px; 
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+    cursor: pointer;
+    font-weight: 900;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    box-shadow: var(--raw-shadow);
+    transition: transform 0.05s, box-shadow 0.05s;
+    width: 100%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+select {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231a1a1a' stroke-width='3' stroke-linecap='square' stroke-linejoin='miter'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 14px;
+    padding-right: 2.5rem;
+}
+
+button:active, select:active {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0px var(--text-color);
+}
+
+button.primary {
+    background-color: var(--text-color);
+    color: var(--bg-color);
+}
+
+button.mod-toggle-item {
+    background-color: #fcfbf7;
+    color: var(--text-color);
+    border-color: var(--text-color);
+    transition: background-color 0.15s, color 0.15s;
+    padding: 0.7rem 1rem;
+    font-size: 0.8rem;
+}
+
+button.mod-toggle-item.enabled {
+    background-color: #ce6a6a;
+    color: #fcfbf7;
+}
+
+.volume-slider {
+    flex: 1;
+    accent-color: var(--text-color);
+    cursor: pointer;
+    height: 8px;
+    border: 2px solid var(--text-color);
+    background: var(--empty-color);
+    -webkit-appearance: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: var(--text-color);
+    width: 16px;
+    height: 16px;
+    border-radius: 0;
+}
