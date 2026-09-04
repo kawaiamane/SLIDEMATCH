@@ -39,15 +39,15 @@ const MOD_CARDS = {
         { id: 'r_harvest', tag: 'rin', name: 'HARVEST', desc: '自分の盤面の駒の数(最大10)だけ相手の手数を減らす' }
     ],
     tantal: [
-        { id: 't_wipe', tag: 'tnt', name: 'WIPE OUT', desc: '相手の駒を全て消去する' },
-        { id: 't_dominate', tag: 'tnt', name: 'DOMINATE', desc: '相手の駒を半分自分の駒にする' },
-        { id: 't_heal', tag: 'tnt', name: 'SUPER HEAL', desc: '自分の手数を30増やす' },
-        { id: 't_eclipse', tag: 'tnt', name: 'ECLIPSE', desc: '相手の手数を5にする' },
-        { id: 't_genesis', tag: 'tnt', name: 'GENESIS', desc: '空きマスを全て自分の駒で埋める' },
-        { id: 't_meteor', tag: 'tnt', name: 'METEOR', desc: '相手の駒をランダムに5個消去' },
-        { id: 't_obliterate', tag: 'tnt', name: 'OBLITERATE', desc: '盤面の全駒を消去する' },
-        { id: 't_swap', tag: 'tnt', name: 'TIME SWAP', desc: '相手と自分の手数を入れ替える' },
-        { id: 't_steal_count', tag: 'tnt', name: 'STEAL TIME', desc: '相手の手数を10奪う' },
-        { id: 't_wealth', tag: 'tnt', name: 'WEALTH', desc: '自分の手数を1.5倍にする' }
-    ]
+    { id: 't_wipe', tag: 'tnt', name: 'WIPE OUT', desc: '相手の駒を最大5個消去する' },
+    { id: 't_dominate', tag: 'tnt', name: 'DOMINATE', desc: '相手の駒を最大3個自分の駒にする' },
+    { id: 't_heal', tag: 'tnt', name: 'SUPER HEAL', desc: '自分の手数を10増やす' },
+    { id: 't_eclipse', tag: 'tnt', name: 'ECLIPSE', desc: '相手の手数を10にする' },
+    { id: 't_genesis', tag: 'tnt', name: 'GENESIS', desc: '空きマスを最大5個自分の駒で埋める' },
+    { id: 't_meteor', tag: 'tnt', name: 'METEOR', desc: '相手の駒をランダムに最大3個消去する' },
+    { id: 't_obliterate', tag: 'tnt', name: 'OBLITERATE', desc: '盤面からランダムに最大6個の駒を消去する' },
+    { id: 't_swap', tag: 'tnt', name: 'TIME SWAP', desc: '相手と自分の手数を入れ替える' },
+    { id: 't_steal_count', tag: 'tnt', name: 'STEAL TIME', desc: '相手の手数を5奪う' },
+    { id: 't_wealth', tag: 'tnt', name: 'WEALTH', desc: '自分の手数を1.25倍にする' }
+]
 };

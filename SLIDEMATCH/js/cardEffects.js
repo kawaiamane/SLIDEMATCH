@@ -317,10 +317,10 @@ function useCard(idx) {
     activeCardIdx = idx;
 
     if (card.id.startsWith('t_')) {
-        executeTantalCard(card.id);
-        return;
-    }
-
+    playTantalActivationEffect(card.id);
+    executeTantalCard(card.id);
+    return;
+}
     if (card.id === 'n_shuffle') {
         executeShuffleCard();
 
@@ -410,6 +410,192 @@ function useCard(idx) {
     }
 }
 
+// ============================================================
+// TANTAL専用発動演出
+// ============================================================
+
+function playTantalActivationEffect(cardId) {
+
+    // 同じ演出が残っていたら消す
+    const oldOverlay =
+        document.getElementById('tantalActivationOverlay');
+
+    if (oldOverlay) {
+        oldOverlay.remove();
+    }
+
+    // 初回だけ演出用CSSを追加
+    if (!document.getElementById('tantalEffectStyle')) {
+
+        const style =
+            document.createElement('style');
+
+        style.id = 'tantalEffectStyle';
+
+        style.textContent = `
+            @keyframes tantalFlash {
+                0% {
+                    opacity: 0;
+                    transform: scale(0.7);
+                }
+
+                15% {
+                    opacity: 1;
+                    transform: scale(1.05);
+                }
+
+                35% {
+                    opacity: 0.9;
+                    transform: scale(1);
+                }
+
+                100% {
+                    opacity: 0;
+                    transform: scale(1.15);
+                }
+            }
+
+            @keyframes tantalText {
+                0% {
+                    opacity: 0;
+                    transform: scale(0.5);
+                    letter-spacing: 0px;
+                }
+
+                20% {
+                    opacity: 1;
+                    transform: scale(1.1);
+                    letter-spacing: 12px;
+                }
+
+                60% {
+                    opacity: 1;
+                    transform: scale(1);
+                    letter-spacing: 8px;
+                }
+
+                100% {
+                    opacity: 0;
+                    transform: scale(1.2);
+                    letter-spacing: 16px;
+                }
+            }
+
+            @keyframes tantalShake {
+                0%, 100% {
+                    transform: translate(0, 0);
+                }
+
+                20% {
+                    transform: translate(-5px, 3px);
+                }
+
+                40% {
+                    transform: translate(5px, -3px);
+                }
+
+                60% {
+                    transform: translate(-4px, -2px);
+                }
+
+                80% {
+                    transform: translate(4px, 2px);
+                }
+            }
+
+            .tantal-activation-overlay {
+                position: fixed;
+                inset: 0;
+                z-index: 99999;
+                pointer-events: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background:
+                    radial-gradient(
+                        circle,
+                        rgba(170, 110, 255, 0.38) 0%,
+                        rgba(100, 40, 180, 0.18) 35%,
+                        rgba(20, 10, 40, 0) 70%
+                    );
+                animation:
+                    tantalFlash 650ms
+                    cubic-bezier(.2,.8,.2,1)
+                    forwards;
+            }
+
+            .tantal-activation-text {
+                color: #e7d5ff;
+                font-family:
+                    Arial,
+                    Helvetica,
+                    sans-serif;
+                font-size: clamp(42px, 9vw, 100px);
+                font-weight: 900;
+                text-shadow:
+                    0 0 8px #ffffff,
+                    0 0 20px #b56cff,
+                    0 0 45px #7b2cff;
+                animation:
+                    tantalText 650ms
+                    cubic-bezier(.2,.8,.2,1)
+                    forwards;
+            }
+
+            .tantal-shake {
+                animation:
+                    tantalShake 180ms
+                    ease-in-out;
+            }
+        `;
+
+        document.head.appendChild(style);
+    }
+
+    // 画面中央の TANTAL 表示
+    const overlay =
+        document.createElement('div');
+
+    overlay.id = 'tantalActivationOverlay';
+    overlay.className =
+        'tantal-activation-overlay';
+
+    const text =
+        document.createElement('div');
+
+    text.className =
+        'tantal-activation-text';
+
+    text.textContent = 'TANTAL';
+
+    overlay.appendChild(text);
+    document.body.appendChild(overlay);
+
+    // 画面を一瞬だけ揺らす
+    document.body.classList.remove('tantal-shake');
+
+    // 再適用させるために1フレーム待つ
+    requestAnimationFrame(() => {
+        document.body.classList.add('tantal-shake');
+
+        setTimeout(() => {
+            document.body.classList.remove(
+                'tantal-shake'
+            );
+        }, 200);
+    });
+
+    // タンタル発動音
+    playSound('score');
+
+    // 演出終了
+    setTimeout(() => {
+        if (overlay.parentNode) {
+            overlay.remove();
+        }
+    }, 700);
+}
+
 
 // ============================================================
 // TANTALカード
@@ -421,6 +607,10 @@ function executeTantalCard(id) {
         currentPlayer === 1 ? 2 : 1;
 
     let isBoardChanged = false;
+
+    // ========================================================
+    // 盤面系タンタル
+    // ========================================================
 
     if (
         [
@@ -434,44 +624,21 @@ function executeTantalCard(id) {
 
         let targets = [];
 
-        for (let r = 0; r < SIZE; r++) {
-            for (let c = 0; c < SIZE; c++) {
+        // ----------------------------------------------------
+        // WIPE OUT
+        // 相手の駒を最大5個
+        // ----------------------------------------------------
 
-                if (
-                    id === 't_wipe' &&
-                    board[r][c] === opp
-                ) {
-                    board[r][c] = 0;
-                }
+        if (id === 't_wipe') {
 
-                if (
-                    id === 't_genesis' &&
-                    board[r][c] === 0
-                ) {
-                    board[r][c] =
-                        currentPlayer;
-                }
+            for (let r = 0; r < SIZE; r++) {
+                for (let c = 0; c < SIZE; c++) {
 
-                if (
-                    id === 't_obliterate' &&
-                    board[r][c] !== 0
-                ) {
-                    board[r][c] = 0;
-                }
-
-                if (
-                    (
-                        id === 't_meteor' ||
-                        id === 't_dominate'
-                    ) &&
-                    board[r][c] === opp
-                ) {
-                    targets.push({ r, c });
+                    if (board[r][c] === opp) {
+                        targets.push({ r, c });
+                    }
                 }
             }
-        }
-
-        if (id === 't_meteor') {
 
             for (let i = 0; i < 5; i++) {
 
@@ -490,16 +657,28 @@ function executeTantalCard(id) {
 
                 board[t.r][t.c] = 0;
             }
+
+            isBoardChanged = true;
         }
 
-        if (id === 't_dominate') {
 
-            const limit =
-                Math.ceil(
-                    targets.length / 2
-                );
+        // ----------------------------------------------------
+        // GENESIS
+        // 空きマスを最大5個
+        // ----------------------------------------------------
 
-            for (let i = 0; i < limit; i++) {
+        if (id === 't_genesis') {
+
+            for (let r = 0; r < SIZE; r++) {
+                for (let c = 0; c < SIZE; c++) {
+
+                    if (board[r][c] === 0) {
+                        targets.push({ r, c });
+                    }
+                }
+            }
+
+            for (let i = 0; i < 5; i++) {
 
                 if (targets.length === 0) {
                     break;
@@ -517,21 +696,151 @@ function executeTantalCard(id) {
                 board[t.r][t.c] =
                     currentPlayer;
             }
+
+            isBoardChanged = true;
         }
 
-        isBoardChanged = true;
+
+        // ----------------------------------------------------
+        // METEOR
+        // 相手の駒を最大3個
+        // ----------------------------------------------------
+
+        if (id === 't_meteor') {
+
+            for (let r = 0; r < SIZE; r++) {
+                for (let c = 0; c < SIZE; c++) {
+
+                    if (board[r][c] === opp) {
+                        targets.push({ r, c });
+                    }
+                }
+            }
+
+            for (let i = 0; i < 3; i++) {
+
+                if (targets.length === 0) {
+                    break;
+                }
+
+                const t =
+                    targets.splice(
+                        Math.floor(
+                            Math.random() *
+                            targets.length
+                        ),
+                        1
+                    )[0];
+
+                board[t.r][t.c] = 0;
+            }
+
+            isBoardChanged = true;
+        }
+
+
+        // ----------------------------------------------------
+        // DOMINATE
+        // 相手の駒を最大3個、自分の駒に
+        // ----------------------------------------------------
+
+        if (id === 't_dominate') {
+
+            for (let r = 0; r < SIZE; r++) {
+                for (let c = 0; c < SIZE; c++) {
+
+                    if (board[r][c] === opp) {
+                        targets.push({ r, c });
+                    }
+                }
+            }
+
+            for (let i = 0; i < 3; i++) {
+
+                if (targets.length === 0) {
+                    break;
+                }
+
+                const t =
+                    targets.splice(
+                        Math.floor(
+                            Math.random() *
+                            targets.length
+                        ),
+                        1
+                    )[0];
+
+                board[t.r][t.c] =
+                    currentPlayer;
+            }
+
+            isBoardChanged = true;
+        }
+
+
+        // ----------------------------------------------------
+        // OBLITERATE
+        // 全消去ではなく最大6個をランダム消去
+        // ----------------------------------------------------
+
+        if (id === 't_obliterate') {
+
+            for (let r = 0; r < SIZE; r++) {
+                for (let c = 0; c < SIZE; c++) {
+
+                    if (board[r][c] !== 0) {
+                        targets.push({ r, c });
+                    }
+                }
+            }
+
+            for (let i = 0; i < 6; i++) {
+
+                if (targets.length === 0) {
+                    break;
+                }
+
+                const t =
+                    targets.splice(
+                        Math.floor(
+                            Math.random() *
+                            targets.length
+                        ),
+                        1
+                    )[0];
+
+                board[t.r][t.c] = 0;
+            }
+
+            isBoardChanged = true;
+        }
 
     } else {
 
+        // ====================================================
+        // 手数系タンタル
+        // ====================================================
+
+        // SUPER HEAL
         if (id === 't_heal') {
-            counts[currentPlayer] += 30;
+            counts[currentPlayer] += 10;
         }
 
+
+        // ECLIPSE
+        // 相手を5ではなく10まで落とす
         if (id === 't_eclipse') {
             counts[opp] =
-                Math.min(5, counts[opp]);
+                Math.min(
+                    10,
+                    counts[opp]
+                );
         }
 
+
+        // TIME SWAP
+        // これは強力だが、相手との差を
+        // 直接作るカードではないので維持
         if (id === 't_swap') {
 
             const temp =
@@ -543,22 +852,32 @@ function executeTantalCard(id) {
             counts[opp] = temp;
         }
 
+
+        // STEAL TIME
+        // 10 → 5
         if (id === 't_steal_count') {
 
             const steal =
                 Math.min(
-                    10,
-                    counts[opp] - 1
+                    5,
+                    Math.max(
+                        0,
+                        counts[opp] - 1
+                    )
                 );
 
             counts[opp] -= steal;
             counts[currentPlayer] += steal;
         }
 
+
+        // WEALTH
+        // 1.5倍 → 1.25倍
         if (id === 't_wealth') {
+
             counts[currentPlayer] =
                 Math.floor(
-                    counts[currentPlayer] * 1.5
+                    counts[currentPlayer] * 1.25
                 );
         }
 
@@ -567,6 +886,7 @@ function executeTantalCard(id) {
 
     consumeActiveCard();
 
+    // タンタル専用の強めの音
     playSound('score');
 
     if (isBoardChanged) {
@@ -587,7 +907,6 @@ function executeTantalCard(id) {
         endTurn();
     }
 }
-
 
 // ============================================================
 // カード対象ハイライト
