@@ -336,73 +336,105 @@ function endTurn() {
 }
 
 function checkWinCondition() {
-    if (isGameOver) return true;
 
-    let winMsg = "";
-    const p2Name = gameMode === 'CPU' ? 'CPU' : 'P2';
-
-    // ========================================================
-    // 勝利判定
-    //
-    // 手数を使い切ったプレイヤーは負け。
-    // 自分のコマが0になったプレイヤーも負け。
-    // ========================================================
-
-    // P1が手数切れ / コマ切れ
-    // → P2（またはCPU）の勝利
-    if (
-        counts[1] <= 0 ||
-        boardPieces[1] === 0
-    ) {
-        winMsg = `${p2Name} WINS!`;
-
-    // P2が手数切れ / コマ切れ
-    // → P1の勝利
-    } else if (
-        counts[2] <= 0 ||
-        boardPieces[2] === 0
-    ) {
-        winMsg = "P1 WINS!";
-    }
-
-    // ========================================================
-    // 勝利が決まった場合
-    // ========================================================
-
-    if (winMsg !== "") {
-
-        isGameOver = true;
-
-        isCpuThinking = false;
-        isProcessingChain = false;
-
-        // CPUのタイマーが残っていた場合も停止
-        if (
-            typeof cpuTimeoutId !== 'undefined' &&
-            cpuTimeoutId !== null
-        ) {
-            clearTimeout(cpuTimeoutId);
-            cpuTimeoutId = null;
-        }
-
-        // カード選択状態を解除
-        if (typeof cancelCardActive === 'function') {
-            cancelCardActive();
-        }
-
-        // 結果表示
-        document.getElementById(
-            'winMessage'
-        ).innerText = winMsg;
-
-        document
-            .getElementById('gameResultModal')
-            .classList.add('active');
-
+    if (isGameOver) {
         return true;
     }
 
-    return false;
+    let winMsg = "";
+
+    const p2Name =
+        gameMode === 'CPU'
+            ? 'CPU'
+            : 'P2';
+
+
+    // ========================================================
+    // ① 自分のブロックを全部消したら「自分の勝ち」
+    // ========================================================
+
+    if (boardPieces[1] <= 0) {
+
+        // P1のブロックが0
+        winMsg = "P1 WINS!";
+
+    } else if (boardPieces[2] <= 0) {
+
+        // P2 / CPUのブロックが0
+        winMsg = `${p2Name} WINS!`;
+    }
+
+
+    // ========================================================
+    // ② 手数を使い切ったら「そのプレイヤーの負け」
+    //
+    // ブロック0の判定を先にする。
+    // ========================================================
+
+    else if (counts[1] <= 0) {
+
+        // P1が手数切れ
+        winMsg = `${p2Name} WINS!`;
+
+    } else if (counts[2] <= 0) {
+
+        // P2 / CPUが手数切れ
+        winMsg = "P1 WINS!";
+    }
+
+
+    // ========================================================
+    // 勝敗が決まっていない
+    // ========================================================
+
+    if (winMsg === "") {
+        return false;
+    }
+
+
+    // ========================================================
+    // ゲーム終了
+    // ========================================================
+
+    isGameOver = true;
+
+    // CPU処理を停止
+    isCpuThinking = false;
+    isProcessingChain = false;
+
+
+    // CPUの安全タイマーを停止
+    if (
+        typeof cpuTimeoutId !== 'undefined' &&
+        cpuTimeoutId !== null
+    ) {
+
+        clearTimeout(cpuTimeoutId);
+
+        cpuTimeoutId = null;
+    }
+
+
+    // カード選択状態を解除
+    if (
+        typeof cancelCardActive === 'function'
+    ) {
+
+        cancelCardActive();
+    }
+
+
+    // 結果表示
+    document
+        .getElementById('winMessage')
+        .innerText = winMsg;
+
+    document
+        .getElementById('gameResultModal')
+        .classList.add('active');
+
+
+    return true;
 }
 
 function closeResultAndGoHome() {
